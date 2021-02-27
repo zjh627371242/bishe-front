@@ -25,7 +25,12 @@
 
     <div class="btn-area">
       <el-button @click="handleCancel">取消</el-button>
-      <el-button type="primary" @click="onSubmit('form')">保存</el-button>
+      <el-button type="primary" @click="onSubmit('form', false)" v-if="info.id"
+        >保存</el-button
+      >
+      <el-button type="primary" @click="onSubmit('form', true)" v-else
+        >新增</el-button
+      >
     </div>
   </div>
 </template>
@@ -52,11 +57,24 @@ export default {
       courseList: [],
     };
   },
+  created() {
+    if (this.info.id) {
+      this.loadData();
+    }
+  },
   methods: {
-    onSubmit(formName) {
+    async loadData() {
+      const res = await this.$api.course.detail({
+        id: this.info.id,
+      });
+      if (res.code === 1) {
+        this.formInline = res.data;
+      } else this.$message.error(res.message);
+    },
+    onSubmit(formName,isAdd) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$emit("handleSubmit", this.formInline);
+          this.$emit("handleSubmit", this.formInline, isAdd);
         }
       });
     },

@@ -12,6 +12,7 @@ export default {
       this.title = title;
     },
     closeDialog() {
+      this.subData = {}
       this.dialogVisible = false;
     },
   },

@@ -5,16 +5,16 @@ import qs from 'qs'
 
 //1. 创建新的axios实例，
 const service = axios.create({
-    baseURL: 'http://123.57.208.218:9090',
+    baseURL: 'http://127.0.0.1:8080',
     timeout: 60 * 1000
 })
 
 // 请求拦截器
 service.interceptors.request.use(config => {
     //发请求前做的一些处理，数据转化，配置请求头，设置token,设置loading等，根据需求去添加
-    config.data = qs.stringify(config.data); //数据转化,也可以使用qs转换
+    // config.data = qs.stringify(config.data); //数据转化,也可以使用qs转换
     config.headers = {
-        'Content-Type': 'application/x-www-form-urlencoded' //配置请求头
+        'Content-Type': 'application/json'//配置请求头
     }
 
     // 注意使用token的时候需要引入cookie方法或者用本地localStorage等方法，推荐js-cookie
