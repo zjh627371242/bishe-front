@@ -1,27 +1,74 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Vue from "vue";
+import VueRouter from "vue-router";
 
-Vue.use(VueRouter)
+import Login from "../views/Login.vue";
+
+import Task from "../views/Task";
+import Teacher from "../views/Teacher";
+import Work from "../views/Work";
+import Course from "../views/Course";
+
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: "/",
+    name: "Login",
+    component: Login,
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
-]
+    path: "/home",
+    name: "Home",
+    component: () => import("../views/Home.vue"),
+    children: [
+      {
+        path: "/home/task",
+        name: "Task",
+        component: Task,
+      },
+      {
+        path: "/home/teacher",
+        name: "Teacher",
+        component: Teacher,
+      },
+      {
+        path: "/home/work",
+        name: "Work",
+        component: Work,
+      },
+      {
+        path: "/home/Course",
+        name: "Course",
+        component: Course,
+      },
+    ],
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("../views/Login.vue"),
+  },
+  {
+    path: "/register",
+    name: "Register",
+    component: () => import("../views/Register.vue"),
+  },
+];
 
 const router = new VueRouter({
-  routes
-})
+  mode: "history",
+  base: process.env.BASE_URL,
+  routes,
+});
 
-export default router
+// // 路由守卫
+// router.beforeEach((to, from, next) => {
+//   const isLogin = sessionStorage.getItem("ldelToken") ? true : false;
+//   if (to.path == "/login" || to.path == "/register" || to.path == "/index") {
+//     next();
+//   } else {
+//     isLogin ? next() : next("/login");
+//   }
+// });
+
+export default router;
