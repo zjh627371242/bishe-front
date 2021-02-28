@@ -32,6 +32,7 @@
         </el-table-column>
         <el-table-column prop="course.name" label="课程名称" align="center">
         </el-table-column>
+
         <el-table-column prop="classroom" label="授课班级" align="center">
         </el-table-column>
         <el-table-column prop="classType" label="班级类型" align="center">
@@ -43,7 +44,21 @@
         </el-table-column>
         <el-table-column prop="name" label="教师" align="center">
         </el-table-column>
-        <el-table-column label="操作" align="center">
+        <el-table-column
+          prop="theoreticalWordload"
+          label="理论教学工作量"
+          align="center"
+          width="150"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="practicalWordload"
+          label="实践教学工作量"
+          align="center"
+          width="150"
+        >
+        </el-table-column>
+        <el-table-column label="操作" align="center" width="200">
           <template slot-scope="scope">
             <el-button type="warning" plain @click="toEdit(scope.row)"
               >编辑</el-button
@@ -98,8 +113,8 @@ export default {
       subData: {},
       tableData: [],
       classroomTypeMap: {
-        "newClass": "开新班",
-        "repeatClass": "重复班"
+        newClass: "开新班",
+        repeatClass: "重复班",
       },
     };
   },
@@ -126,7 +141,7 @@ export default {
     },
     async handleSubmit(params, isAdd) {
       const res = await this.$api.task[isAdd ? "save" : "update"](params);
-      console.log(res)
+      console.log(res);
       if (res.code === 1) {
         this.$message.success(res.message);
         this.closeDialog();

@@ -5,7 +5,7 @@ import qs from "qs";
 
 //1. 创建新的axios实例，
 const service = axios.create({
-    baseURL: 'http://127.0.0.1:8081',
+    baseURL: 'http://192.168.123.134:8081',
     timeout: 60 * 1000
 })
 

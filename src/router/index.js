@@ -47,7 +47,7 @@ const routes = [
     path: "/login",
     name: "Login",
     component: () => import("../views/Login.vue"),
-  }
+  },
 ];
 
 const router = new VueRouter({
@@ -56,14 +56,14 @@ const router = new VueRouter({
   routes,
 });
 
-// // 路由守卫
-// router.beforeEach((to, from, next) => {
-//   const isLogin = sessionStorage.getItem("ldelToken") ? true : false;
-//   if (to.path == "/login" || to.path == "/register" || to.path == "/index") {
-//     next();
-//   } else {
-//     isLogin ? next() : next("/login");
-//   }
-// });
+// 路由守卫
+router.beforeEach((to, from, next) => {
+  const isLogin = sessionStorage.getItem("isLogin") ? true : false;
+  if (to.path == "/login" || to.path == "/register" || to.path == "/index") {
+    next();
+  } else {
+    isLogin ? next() : next("/login");
+  }
+});
 
 export default router;

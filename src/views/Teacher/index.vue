@@ -8,7 +8,9 @@
         <el-form-item label="职称：">
           <el-input v-model="searchForm.positionalTitle"></el-input>
         </el-form-item>
-        <el-button type="primary" class="search" @click="handleSearch">查询</el-button>
+        <el-button type="primary" class="search" @click="handleSearch"
+          >查询</el-button
+        >
         <el-button class="reset" @click="reset">重置</el-button>
         <el-button
           type="primary"
@@ -32,7 +34,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" align="center">
+        <el-table-column label="操作" align="center" width="200">
           <template slot-scope="scope">
             <el-button type="warning" plain @click="toEdit(scope.row)"
               >编辑</el-button
@@ -85,43 +87,41 @@ export default {
     return {
       searchForm: {},
       subData: {},
-      tableData: [
-      ],
-      typeMap:{
-        "editing":"在编",
-        "engaged":"外聘"
-      }
+      tableData: [],
+      typeMap: {
+        editing: "在编",
+        engaged: "外聘",
+      },
     };
   },
-  created(){
+  created() {
     this.loadData();
   },
   methods: {
-    async handleSubmit(params,isAdd) {
-      if(isAdd){
+    async handleSubmit(params, isAdd) {
+      if (isAdd) {
         const res = await this.$api.teacher.add(params);
-      if (res.code === 1) {
-        this.$message.success(res.message);
-        this.closeDialog();
-        this.searchForm = {};
-        this.loadData(isAdd);
-      } else this.$message.error(res.message);
-      }else{
-      const res = await this.$api.teacher.edit(params);
-      if (res.code === 1) {
-        this.$message.success(res.message);
-        this.closeDialog();
-        this.searchForm = {};
-        this.loadData(isAdd);
-      } else this.$message.error(res.message);
+        if (res.code === 1) {
+          this.$message.success(res.message);
+          this.closeDialog();
+          this.searchForm = {};
+          this.loadData(isAdd);
+        } else this.$message.error(res.message);
+      } else {
+        const res = await this.$api.teacher.edit(params);
+        if (res.code === 1) {
+          this.$message.success(res.message);
+          this.closeDialog();
+          this.searchForm = {};
+          this.loadData(isAdd);
+        } else this.$message.error(res.message);
       }
-      
     },
     handleSearch() {
       this.loadData(true);
     },
     async loadData(isSearch) {
-      isSearch &&( this.defaultParams.page = 1);
+      isSearch && (this.defaultParams.page = 1);
       const res = await this.$api.teacher.list(
         Object.assign({}, this.searchForm, this.defaultParams)
       );
@@ -151,8 +151,7 @@ export default {
             this.loadData(true);
           } else this.$message.error(res.message);
         })
-        .catch((action) => {
-        });
+        .catch((action) => {});
     },
   },
 };

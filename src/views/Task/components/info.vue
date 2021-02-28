@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <el-form ref="form" :model="formInline" label-width="120px">
+    <el-form ref="form" :model="formInline" label-width="130px" :rules="rules">
       <el-form-item label="教师名称：" prop="teacherId">
         <el-select v-model="formInline.teacherId" placeholder="请选择教师名称">
           <el-option
@@ -12,7 +12,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="学年学期：">
+      <el-form-item label="学年学期：" prop="schoolYear">
         <el-row>
           <el-col :span="12">
             <el-date-picker
@@ -34,7 +34,7 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item label="课程名称：">
+      <el-form-item label="课程名称：" prop="courseId">
         <el-select v-model="formInline.courseId" placeholder="请选择课程">
           <el-option
             v-for="item in courseList"
@@ -45,32 +45,32 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="授课班级">
+      <el-form-item label="授课班级" prop="classroom">
         <el-input
           v-model="formInline.classroom"
           placeholder="请输入授课班级"
         ></el-input>
       </el-form-item>
-      <el-form-item label="班级类型">
+      <el-form-item label="班级类型" prop="classType">
         <el-select v-model="formInline.classType" placeholder="请选择班级类型">
           <el-option label="开新班" value="newClass">开新班 </el-option>
           <el-option label="重复班" value="repeatClass">重复班 </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="教学语言">
+      <el-form-item label="教学语言" prop="language">
         <el-select v-model="formInline.language" placeholder="请选择教学语言">
           <el-option label="中文" value="china">中文 </el-option>
           <el-option label="英语" value="english">英语 </el-option>
           <el-option label="双语" value="bilingual">双语 </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="班级人数">
+      <el-form-item label="班级人数" prop="studentCount">
         <el-input
           v-model="formInline.studentCount"
           placeholder="请输入班级人数"
         ></el-input>
       </el-form-item>
-      <el-form-item label="课程计划学时数">
+      <el-form-item label="课程计划学时数" prop="classHours">
         <el-input
           v-model="formInline.classHours"
           placeholder="请输入计划学时数"
@@ -102,13 +102,23 @@ export default {
     return {
       rules: {
         teacherId: [
-          { required: true, message: "请输入收货手机号", trigger: "blur" },
+          { required: true, message: "请选择选择教师", trigger: "blur" },
         ],
-        address: [{ required: true, message: "请输入昵称", trigger: "blur" }],
-        consignee: [{ required: true, message: "请输入昵称", trigger: "blur" }],
+        classHours: [
+          { required: true, message: "请输入学时数", trigger: "blur" },
+        ],
+        studentCount: [
+          { required: true, message: "请输入班级人数", trigger: "blur" },
+        ],
+        language: [{ required: true, message: "请选择教学语言", trigger: "blur" }],
+        classType: [{ required: true, message: "请选择班级类型", trigger: "blur" }],
+        classroom: [{ required: true, message: "请输入授课班级", trigger: "blur" }],
+        schoolYear: [
+          { required: true, message: "请选择学期学年", trigger: "blur" },
+        ],
+        courseId: [{ required: true, message: "请选择课程", trigger: "blur" }],
       },
-      formInline: {
-      },
+      formInline: {},
       teacherList: [],
       courseList: [],
     };

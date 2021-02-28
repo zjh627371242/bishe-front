@@ -31,14 +31,12 @@ export default {
   },
   methods: {
     async onSubmit() {
-      const res = await this.$api.login.login(
-        this.form
-      );
+      const res = await this.$api.login.login(this.form);
       if (res.code === 1) {
         this.$message.success(res.message);
+        sessionStorage.setItem("isLogin", true);
         this.$router.push("/home/task");
       } else this.$message.error(res.message);
-    
     },
     toRegister() {
       this.$router.push("/register");

@@ -1,25 +1,29 @@
 <template>
   <div class="wrapper">
     <el-form ref="form" :model="formInline" label-width="140px" :rules="rules">
-      <el-form-item label="教师名称:">
+      <el-form-item label="教师名称:" prop="name">
         <el-input
           v-model="formInline.name"
           placeholder="请输入教师名称"
         ></el-input>
       </el-form-item>
-      <el-form-item label="职称:">
+      <el-form-item label="职称:" prop="positionalTitle">
         <el-input
           v-model="formInline.positionalTitle"
           placeholder="请输入职称"
         ></el-input>
       </el-form-item>
-      <el-form-item label="聘用形式:">
+      <el-form-item label="聘用形式:" prop="type">
         <el-select v-model="formInline.type" placeholder="请选择聘用形式">
           <el-option label="在编" value="editing">在编</el-option>
           <el-option label="外聘" value="engaged">外聘</el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="学期教学工作量:" style="text-align:left">
+      <el-form-item
+        label="学期教学工作量:"
+        style="text-align:left"
+        prop="workloadTotalList"
+      >
         <el-button type="primary" @click="openDialog">新增工作量</el-button>
       </el-form-item>
       <el-table :data="workloadTotalList" style="width: 100%" border="">
@@ -98,13 +102,20 @@ export default {
     },
   },
   data() {
+    const workloadTotalValidator = (rule, value, callback) => {
+      if (this.workloadTotalList.length === 0) {
+        callback(new Error("请添加教学工作量"));
+      }
+      callback();
+    };
     return {
       rules: {
-        telephone: [
-          { required: true, message: "请输入收货手机号", trigger: "blur" },
+        type: [{ required: true, message: "请选择聘用形式", trigger: "blur" }],
+        positionalTitle: [
+          { required: true, message: "请输入职称", trigger: "blur" },
         ],
-        address: [{ required: true, message: "请输入昵称", trigger: "blur" }],
-        consignee: [{ required: true, message: "请输入昵称", trigger: "blur" }],
+        name: [{ required: true, message: "请输入教师名称", trigger: "blur" }],
+        workloadTotalList: [{ validator: workloadTotalValidator }],
       },
       formInline: {},
       teacherList: [],
@@ -112,7 +123,7 @@ export default {
       workloadTotalList: [],
     };
   },
-   created() {
+  created() {
     if (this.info.id) {
       this.loadData();
     }
@@ -127,7 +138,7 @@ export default {
         this.workloadTotalList = this.formInline.workloadTotalList;
       } else this.$message.error(res.message);
     },
-    onSubmit(formName,isAdd) {
+    onSubmit(formName, isAdd) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.formInline.workloadTotalList = this.workloadTotalList;
