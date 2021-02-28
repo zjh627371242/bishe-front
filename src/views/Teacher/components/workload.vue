@@ -22,16 +22,16 @@
           </el-select>
         </el-form-item>
       </el-form-item>
-      <el-form-item label="理论教学工作量：" prop="theoreticalWordload">
+      <el-form-item label="理论教学总工作量：" prop="theoreticalWordloadTotal">
         <el-input
-          v-model="formInline.theoreticalWordload"
-          placeholder="请输入理论教学工作量："
+          v-model="formInline.theoreticalWordloadTotal"
+          placeholder="请输入理论教学总工作量："
         ></el-input>
       </el-form-item>
-      <el-form-item label="实践教学工作量：" prop="practicalWordload">
+      <el-form-item label="实践教学总工作量：" prop="practicalWordloadTotal">
         <el-input
-          v-model="formInline.practicalWordload"
-          placeholder="请输入实践教学工作量："
+          v-model="formInline.practicalWordloadTotal"
+          placeholder="请输入实践教学总工作量："
         ></el-input>
       </el-form-item>
     </el-form>
@@ -54,14 +54,14 @@ export default {
         schoolTerm: [
           { required: true, message: "请选择学期", trigger: "blur" },
         ],
-        theoreticalWordload: [
+        theoreticalWordloadTotal: [
           {
             required: true,
             message: "请输入理论课教学工作量",
             trigger: "blur",
           },
         ],
-        practicalWordload: [
+        practicalWordloadTotal: [
           { required: true, message: "请输入实践教学工作量", trigger: "blur" },
         ],
       },

@@ -64,7 +64,11 @@
       width="50%"
       top="50px"
     >
-      <Info @handleCancel="closeDialog" />
+      <info
+        :info="subData"
+        @handleSubmit="handleSubmit"
+        @handleCancel="closeDialog"
+      />
     </el-dialog>
   </div>
 </template>
@@ -93,6 +97,26 @@ export default {
     this.loadData();
   },
   methods: {
+    async handleSubmit(params,isAdd) {
+      if(isAdd){
+        const res = await this.$api.teacher.add(params);
+      if (res.code === 1) {
+        this.$message.success(res.message);
+        this.closeDialog();
+        this.searchForm = {};
+        this.loadData(isAdd);
+      } else this.$message.error(res.message);
+      }else{
+      const res = await this.$api.teacher.edit(params);
+      if (res.code === 1) {
+        this.$message.success(res.message);
+        this.closeDialog();
+        this.searchForm = {};
+        this.loadData(isAdd);
+      } else this.$message.error(res.message);
+      }
+      
+    },
     handleSearch() {
       this.loadData(true);
     },

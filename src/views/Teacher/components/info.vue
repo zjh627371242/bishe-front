@@ -1,33 +1,28 @@
 <template>
   <div class="wrapper">
     <el-form ref="form" :model="formInline" label-width="140px" :rules="rules">
-      <el-form-item label="教师名称：">
+      <el-form-item label="教师名称:">
         <el-input
           v-model="formInline.name"
           placeholder="请输入教师名称"
         ></el-input>
       </el-form-item>
-      <el-form-item label="职称：">
+      <el-form-item label="职称:">
         <el-input
-          v-model="formInline.title"
+          v-model="formInline.positionalTitle"
           placeholder="请输入职称"
         ></el-input>
       </el-form-item>
-      <el-form-item label="聘用形式：">
-        <el-select v-model="formInline.teacherId" placeholder="请选择聘用形式">
-          <el-option
-            v-for="item in courseList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          >
-          </el-option>
+      <el-form-item label="聘用形式:">
+        <el-select v-model="formInline.type" placeholder="请选择聘用形式">
+          <el-option label="在编" value="editing">在编</el-option>
+          <el-option label="外聘" value="engaged">外聘</el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="学期教学工作量：" style="text-align:left">
+      <el-form-item label="学期教学工作量:" style="text-align:left">
         <el-button type="primary" @click="openDialog">新增工作量</el-button>
       </el-form-item>
-      <el-table :data="workloadList" style="width: 100%" border="">
+      <el-table :data="workloadTotalList" style="width: 100%" border="">
         <el-table-column
           prop="schoolTerm"
           label="学期"
@@ -43,15 +38,15 @@
         >
         </el-table-column>
         <el-table-column
-          prop="theoreticalWordload"
-          label="理论教学工作量"
+          prop="theoreticalWordloadTotal"
+          label="理论教学总工作量"
           width="180"
           align="center"
         >
         </el-table-column>
         <el-table-column
-          prop="practicalWordload"
-          label="实践教学工作量"
+          prop="practicalWordloadTotal"
+          label="实践教学总工作量"
           width="180"
           align="center"
         >
@@ -68,7 +63,12 @@
 
     <div class="btn-area">
       <el-button @click="handleCancel">取消</el-button>
-      <el-button type="primary" @click="onSubmit('form')">保存</el-button>
+      <el-button type="primary" @click="onSubmit('form', false)" v-if="info.id"
+        >保存</el-button
+      >
+      <el-button type="primary" @click="onSubmit('form', true)" v-else
+        >新增</el-button
+      >
     </div>
     <el-dialog
       width="50%"
@@ -109,19 +109,34 @@ export default {
       formInline: {},
       teacherList: [],
       courseList: [],
-      workloadList: [],
+      workloadTotalList: [],
     };
   },
+   created() {
+    if (this.info.id) {
+      this.loadData();
+    }
+  },
   methods: {
-    onSubmit(formName) {
+    async loadData() {
+      const res = await this.$api.teacher.detail({
+        id: this.info.id,
+      });
+      if (res.code === 1) {
+        this.formInline = res.data;
+        this.workloadTotalList = this.formInline.workloadTotalList;
+      } else this.$message.error(res.message);
+    },
+    onSubmit(formName,isAdd) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$emit("handleSubmit", this.formInline);
+          this.formInline.workloadTotalList = this.workloadTotalList;
+          this.$emit("handleSubmit", this.formInline, isAdd);
         }
       });
     },
     handlePush(data) {
-      this.workloadList.push(data);
+      this.workloadTotalList.push(data);
       this.closeDialog();
     },
     handleCancel() {
@@ -134,7 +149,7 @@ export default {
         cancelButtonText: "取消",
       })
         .then(async () => {
-          this.workloadList.splice(row.$index, 1);
+          this.workloadTotalList.splice(row.$index, 1);
         })
         .catch((action) => {});
     },

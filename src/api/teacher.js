@@ -10,5 +10,13 @@ export default {
     getTeacherList(params){
         return http.post('/teacher/getTeacherList',params)
     },
-    
+    add(params){
+        return http.post('/teacher/add',params)
+    },
+    detail(params){
+        return http.post('/teacher/detail',params)
+    },
+    edit(params){
+        return http.post('/teacher/edit',params)
+    },
 };
