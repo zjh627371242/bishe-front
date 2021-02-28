@@ -14,9 +14,6 @@
       <el-button type="primary" class="login-btn" @click="onSubmit"
         >登录</el-button
       >
-      <p class="tip">
-        没有账号？前往<span class="to-register" @click="toRegister">注册</span>
-      </p>
     </div>
   </div>
 </template>
@@ -39,7 +36,7 @@ export default {
       );
       if (res.code === 1) {
         this.$message.success(res.message);
-        this.$router.push("/home");
+        this.$router.push("/home/task");
       } else this.$message.error(res.message);
     
     },
