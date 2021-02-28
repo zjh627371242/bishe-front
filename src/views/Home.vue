@@ -6,6 +6,11 @@
           <img src="../assets/logo.png" alt="" class="logo" />
         </div>
         <h2 class="title">高校教师管理系统</h2>
+        <div class="exit">
+          <el-button type="warning" plain round @click="exit"
+            >退出登录</el-button
+          >
+        </div>
       </el-header>
 
       <el-container>
@@ -52,7 +57,13 @@ export default {
     };
   },
   components: {},
-  methods: {},
+  methods: {
+    exit() {
+      this.$router.push("/login");
+      sessionStorage.removeItem("isLogin");
+      this.$message.success("退出成功");
+    },
+  },
   watch: {
     $route: {
       handler(val) {
@@ -92,6 +103,13 @@ export default {
       width: 50px;
       height: 50px;
     }
+  }
+  .exit {
+    float: right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
   }
 }
 </style>
