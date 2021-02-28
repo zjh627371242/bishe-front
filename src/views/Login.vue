@@ -34,7 +34,14 @@ export default {
   },
   methods: {
     async onSubmit() {
-     
+      const res = await this.$api.login.login(
+        this.form
+      );
+      if (res.code === 1) {
+        this.$message.success(res.message);
+        this.$router.push("/home");
+      } else this.$message.error(res.message);
+    
     },
     toRegister() {
       this.$router.push("/register");

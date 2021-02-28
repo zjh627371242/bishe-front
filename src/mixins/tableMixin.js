@@ -12,26 +12,19 @@ export default {
   methods: {
     handleSizeChange(val) {
       this.defaultParams.limit = val;
+      this.loadData()
     },
     handleCurrentChange(val) {
       this.defaultParams.page = val;
+      this.loadData()
     },
     reset() {
       this.defaultParams = {
         page: 1,
-        limit: 10,
+        limit: 10
       }
       this.searchForm = {};
       this.loadData(true);
     },
-  },
-  watch: {
-    defaultParams: {
-      handler(val) {
-        console.log(123)
-        this.loadData()
-      },
-      deep: true
-    }
   }
 };

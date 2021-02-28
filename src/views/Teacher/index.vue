@@ -3,13 +3,13 @@
     <div class="search-form">
       <el-form ref="form" :model="searchForm" :inline="true" label-width="80px">
         <el-form-item label="姓名：">
-          <el-input v-model="searchForm.teacher"></el-input>
+          <el-input v-model="searchForm.name"></el-input>
         </el-form-item>
         <el-form-item label="职称：">
-          <el-input v-model="searchForm.couse"></el-input>
+          <el-input v-model="searchForm.positionalTitle"></el-input>
         </el-form-item>
-        <el-button type="primary" class="search">查询</el-button>
-        <el-button class="reset">重置</el-button>
+        <el-button type="primary" class="search" @click="handleSearch">查询</el-button>
+        <el-button class="reset" @click="reset">重置</el-button>
         <el-button
           type="primary"
           class="add"
@@ -22,11 +22,14 @@
     <div class="table">
       <el-table :data="tableData" style="width: 100%" border>
         <el-table-column type="index" width="50"> </el-table-column>
-        <el-table-column prop="schoolYear" label="姓名" align="center">
+        <el-table-column prop="name" label="姓名" align="center">
         </el-table-column>
-        <el-table-column prop="classroom" label="职称" align="center">
+        <el-table-column prop="positionalTitle" label="职称" align="center">
         </el-table-column>
-        <el-table-column prop="classType" label="聘用形式" align="center">
+        <el-table-column prop="type" label="聘用形式" align="center">
+          <template slot-scope="scope">
+            <span>{{ typeMap[scope.row.type] }}</span>
+          </template>
         </el-table-column>
 
         <el-table-column label="操作" align="center">
@@ -44,8 +47,8 @@
         <el-pagination
           :total="total"
           :page-sizes="[5, 10, 15, 20]"
-          :page-size="defaultParams.pageSize"
-          :current-page="defaultParams.pageNum"
+          :page-size="defaultParams.limit"
+          :current-page="defaultParams.page"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           layout="total, sizes, prev, pager, next, jumper"
@@ -79,17 +82,31 @@ export default {
       searchForm: {},
       subData: {},
       tableData: [
-        {
-          teacherName: "张三",
-          studentCount: "12",
-          classType: "重开班",
-          classroom: "一班",
-          schoolYear: "2",
-        },
       ],
+      typeMap:{
+        "editing":"在编",
+        "engaged":"外聘"
+      }
     };
   },
+  created(){
+    this.loadData();
+  },
   methods: {
+    handleSearch() {
+      this.loadData(true);
+    },
+    async loadData(isSearch) {
+      console.log(111)
+      isSearch &&( this.defaultParams.page = 1);
+      const res = await this.$api.teacher.list(
+        Object.assign({}, this.searchForm, this.defaultParams)
+      );
+      if (res.code == 1) {
+        this.total = res.data.total;
+        this.tableData = res.data.records;
+      }
+    },
     toEdit(row) {
       this.subData = row;
       this.openDialog({ title: "编辑教师信息" });
@@ -101,10 +118,17 @@ export default {
         cancelButtonText: "取消",
       })
         .then(async () => {
-          console.log("删除");
+          const res = await this.$api.teacher.delete({
+            id: row.id,
+          });
+          if (res.code === 1) {
+            this.$message.success(res.message);
+            this.closeDialog();
+            this.searchForm = {};
+            this.loadData(true);
+          } else this.$message.error(res.message);
         })
         .catch((action) => {
-          console.log("取消删除");
         });
     },
   },
