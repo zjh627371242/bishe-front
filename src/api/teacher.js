@@ -6,5 +6,9 @@ export default {
     },
     delete(params){
         return http.post('/teacher/delete',params)
-    }
+    },
+    getTeacherList(params){
+        return http.post('/teacher/getTeacherList',params)
+    },
+    
 };

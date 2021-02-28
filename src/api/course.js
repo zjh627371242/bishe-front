@@ -16,4 +16,7 @@ export default {
     edit(params){
         return http.post('/course/edit',params)
     },
+    getCourseList(params){
+        return http.post('/course/getCourseList',params)
+    },
 };

@@ -97,7 +97,6 @@ export default {
       this.loadData(true);
     },
     async loadData(isSearch) {
-      console.log(111)
       isSearch &&( this.defaultParams.page = 1);
       const res = await this.$api.teacher.list(
         Object.assign({}, this.searchForm, this.defaultParams)
